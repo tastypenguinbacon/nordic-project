@@ -20,13 +20,18 @@ void timer_handler(void * p_context)
 		ble_home_controller_light_controller_t p_light_controller;
 		ble_home_controller_temperature_t p_temperature_controller;
 		ble_security_system_door_controller_t  p_door_controller;
-
+		ble_security_system_motions_sensor_t  p_sensors;
+	
+		//kontrola drzwi
 		p_door_controller.door_close=(uint8_t)nrf_gpio_pin_read(22);
 	
+	  //temperatura
 		int32_t volatile temperature;
 		nrf_temp_init();
 		temperature = (nrf_temp_read() / 4);	
-	
+		p_temperature_controller.temperature_value=	(uint32_t)temperature;		
+
+		//oswietlenie
 		uint8_t light_temp=0;
 						for(int i=0;i<8;i++)
 						{
@@ -34,12 +39,16 @@ void timer_handler(void * p_context)
 						}
 						p_light_controller.light=light_temp;
 						
-		p_temperature_controller.temperature_value=	(uint32_t)temperature;		
-
-						
+			
+		//sensory ruchu
+		p_sensors.sensor_1 =(uint8_t)nrf_gpio_pin_read(19);
+		p_sensors.sensor_2=(uint8_t)nrf_gpio_pin_read(20);
+					
+		//wywolanie funkcji wysylajacych wartosc			
 		ble_home_controller_light_controller_set(&m_home_controller,&p_light_controller);
 	  ble_home_controller_temperature_controller_set(&m_home_controller,&p_temperature_controller);
 		ble_security_system_door_controller_set(&m_security_system,&p_door_controller);
+		ble_security_system_motions_sensor_set(&m_security_system, &p_sensors);
 }
 
 
@@ -81,8 +90,6 @@ static void ble_security_system_evt_handler(ble_security_system_t * p_security_s
 
 static void ble_home_controller_evt_handler(ble_home_controller_t * p_home_controller, ble_home_controller_evt_t * p_evt)
 {	
-	
-		//??!! czy notification w evt_type jest kiedykolwiek ustawiane??	
 		uint8_t light;
 		uint8_t maska=1;
 		int i;
@@ -100,7 +107,7 @@ static void ble_home_controller_evt_handler(ble_home_controller_t * p_home_contr
 						nrf_gpio_pin_clear(11+i);
 					}
 					maska=maska<<1;
-				}//gdzies w mainie ustawimy sobie a central ma zwracac to co dostal chyba ze stwierdzi inaczej! :>
+				}
 }
 
 
