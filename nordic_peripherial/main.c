@@ -760,7 +760,7 @@ int main(void)
     NRF_LOG_INFO("Bluetooth Dev Studio example started.\r\n");
 
     advertising_start();
-
+		bsp_board_led_on(1);
     // Enter main loop.
     for (;;)
     {

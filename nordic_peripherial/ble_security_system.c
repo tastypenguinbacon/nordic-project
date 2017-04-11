@@ -152,9 +152,6 @@ static void on_write(ble_security_system_t * p_security_system, ble_gatts_evt_wr
             evt.evt_type = BLE_SECURITY_SYSTEM_MOTIONS_SENSOR_EVT_WRITE;
             motions_sensor_decode(p_ble_evt->len, p_ble_evt->data, &evt.params.motions_sensor);
 					
-						evt.params.motions_sensor.sensor_1=(uint8_t)nrf_gpio_pin_read(19);
-						evt.params.motions_sensor.sensor_2=(uint8_t)nrf_gpio_pin_read(20);
-					
             p_security_system->evt_handler(p_security_system, &evt);
         }
     }
@@ -376,7 +373,7 @@ uint32_t ble_security_system_door_controller_set(ble_security_system_t * p_secur
     gatts_value.offset  = 0;
     gatts_value.p_value = encoded_value;
 
-    sd_ble_gatts_value_set(p_security_system->conn_handle, p_security_system->door_controller_handles.value_handle, &gatts_value);
+    //sd_ble_gatts_value_set(p_security_system->conn_handle, p_security_system->door_controller_handles.value_handle, &gatts_value);
 	
 		
 		//???????????????????????????????????????????
@@ -409,7 +406,7 @@ uint32_t ble_security_system_motions_sensor_set(ble_security_system_t * p_securi
     gatts_value.offset  = 0;
     gatts_value.p_value = encoded_value;
 
-    sd_ble_gatts_value_set(p_security_system->conn_handle, p_security_system->motions_sensor_handles.value_handle, &gatts_value);
+    //sd_ble_gatts_value_set(p_security_system->conn_handle, p_security_system->motions_sensor_handles.value_handle, &gatts_value);
 	
 	
 	

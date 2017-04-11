@@ -293,7 +293,7 @@ uint32_t ble_home_controller_light_controller_set(ble_home_controller_t * p_home
     gatts_value.offset  = 0;
     gatts_value.p_value = encoded_value;
 	
-		sd_ble_gatts_value_set(p_home_controller->conn_handle, p_home_controller->light_controller_handles.value_handle, &gatts_value);
+		//sd_ble_gatts_value_set(p_home_controller->conn_handle, p_home_controller->light_controller_handles.value_handle, &gatts_value);
 		
 		//???????????????????????????????????????????
             ble_gatts_hvx_params_t hvx_params;
@@ -329,7 +329,7 @@ uint32_t ble_home_controller_temperature_controller_set(ble_home_controller_t * 
 	
 		
 		
-    sd_ble_gatts_value_set(p_home_controller->conn_handle, p_home_controller->temperature_handles.value_handle, &gatts_value);
+    //sd_ble_gatts_value_set(p_home_controller->conn_handle, p_home_controller->temperature_handles.value_handle, &gatts_value);
 		
 		//???????????????????????????????????????????
             ble_gatts_hvx_params_t hvx_params;

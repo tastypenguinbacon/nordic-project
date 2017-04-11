@@ -3,11 +3,10 @@
 #include "service_if.h"
 #include <stdint.h>
 //#include "app_trace.h" 
-#include "ble_security_system.h" 
-#include "ble_home_controller.h" 
 #include "nrf_temp.h"
 #include "nrf_gpio.h"
-
+#include "ble_security_system.h" 
+#include "ble_home_controller.h" 
 
 
 static ble_security_system_t    m_security_system; 
