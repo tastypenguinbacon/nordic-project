@@ -74,18 +74,16 @@
 #include "service_if.h"
 #include "nrf_ble_qwr.h"
 #include "nrf_ble_gatt.h"
-#include	"ble_home_controller.h"
-
-
+#include "nrf_temp.h"
 #define NRF_LOG_MODULE_NAME "APP"
 #include "nrf_log.h"
 #include "nrf_log_ctrl.h"
+#include "ble_home_controller.h" 
 
-
-#define DEVICE_NAME                      "Nordic_Peripherial"                               /**< Name of device. Will be included in the advertising data. */
-#define MANUFACTURER_NAME                "Witold_Dominik_Adrian"                      /**< Manufacturer. Will be passed to Device Information Service. */
+#define DEVICE_NAME                      "Nordic_BDS"                               /**< Name of device. Will be included in the advertising data. */
+#define MANUFACTURER_NAME                "NordicSemiconductor"                      /**< Manufacturer. Will be passed to Device Information Service. */
 #define APP_ADV_INTERVAL                 300                                        /**< The advertising interval (in units of 0.625 ms. This value corresponds to 187.5 ms). */
-#define APP_ADV_TIMEOUT_IN_SECONDS       2000                                        /**< The advertising timeout in units of seconds. */
+#define APP_ADV_TIMEOUT_IN_SECONDS       100                                  /**< The advertising timeout in units of seconds. */
 
 #define MIN_CONN_INTERVAL                MSEC_TO_UNITS(100, UNIT_1_25_MS)           /**< Minimum acceptable connection interval (0.1 seconds). */
 #define MAX_CONN_INTERVAL                MSEC_TO_UNITS(200, UNIT_1_25_MS)           /**< Maximum acceptable connection interval (0.2 second). */
@@ -93,7 +91,7 @@
 #define CONN_SUP_TIMEOUT                 MSEC_TO_UNITS(4000, UNIT_10_MS)            /**< Connection supervisory timeout (4 seconds). */
 
 #define FIRST_CONN_PARAMS_UPDATE_DELAY   APP_TIMER_TICKS(5000)                      /**< Time from initiating event (connect or start of notification) to first time sd_ble_gap_conn_param_update is called (5 seconds). */
-#define NEXT_CONN_PARAMS_UPDATE_DELAY    APP_TIMER_TICKS(6000)                     /**< Time between each call to sd_ble_gap_conn_param_update after the first call (30 seconds). */
+#define NEXT_CONN_PARAMS_UPDATE_DELAY    APP_TIMER_TICKS(30000)                     /**< Time between each call to sd_ble_gap_conn_param_update after the first call (30 seconds). */
 #define MAX_CONN_PARAMS_UPDATE_COUNT     3                                          /**< Number of attempts before giving up the connection parameter negotiation. */
 
 #define SEC_PARAM_BOND                   1                                          /**< Perform bonding. */
@@ -107,9 +105,6 @@
 
 #define DEAD_BEEF                        0xDEADBEEF                                 /**< Value used as error code on stack dump, can be used to identify stack location on stack unwind. */
 
-#define Timer_time     APP_TIMER_TICKS(2000, 0) 
-APP_TIMER_DEF(timer_timer);   
-
 static uint16_t                          m_conn_handle = BLE_CONN_HANDLE_INVALID;   /**< Handle of the current connection. */
 static nrf_ble_qwr_t                     m_qwr;                                     /**< Queued Writes structure.*/
 
@@ -118,6 +113,10 @@ static nrf_ble_gatt_t                    m_gatt;                                
 // YOUR_JOB: Use UUIDs for service(s) used in your application.
 static ble_uuid_t m_adv_uuids[] = {{BLE_UUID_DEVICE_INFORMATION_SERVICE, BLE_UUID_TYPE_BLE}}; /**< Universally unique service identifiers. */
 
+#define Timer_time APP_TIMER_TICKS(1000) 
+APP_TIMER_DEF(timer_timer); 
+APP_TIMER_DEF(timer_timer_2); 
+APP_TIMER_DEF(timer_button); 
 
 /**@brief Callback function for asserts in the SoftDevice.
  *
@@ -154,10 +153,18 @@ static void fds_evt_handler(fds_evt_t const * const p_evt)
  *
  * @details Initializes the timer module. This creates and starts application timers.
  */
+static void advertising_start(void);
+void timer_handler_2(void * p_context){
+	
+	if(m_conn_handle==BLE_CONN_HANDLE_INVALID){
+			NRF_LOG_INFO("Bluetooth. \n");
+			advertising_start();}
+	
+}
+
 
 static void timers_init(void)
-{
-
+{ 
     // Initialize timer module.
     ret_code_t err_code = app_timer_init();
     APP_ERROR_CHECK(err_code);
@@ -165,6 +172,10 @@ static void timers_init(void)
     // Create timers.
 		
     err_code = app_timer_create(&timer_timer, APP_TIMER_MODE_REPEATED, timer_handler);
+    APP_ERROR_CHECK(err_code); 
+		err_code = app_timer_create(&timer_timer_2, APP_TIMER_MODE_REPEATED, timer_handler_2);
+    APP_ERROR_CHECK(err_code); 
+		err_code = app_timer_create(&timer_button, APP_TIMER_MODE_REPEATED, timer_handler_button);
     APP_ERROR_CHECK(err_code); 
 }
 
@@ -225,8 +236,8 @@ static void services_init(void)
     qwr_init.mem_buffer.p_mem = NULL;
 
     err_code = nrf_ble_qwr_init(&m_qwr, &qwr_init);
+	
     APP_ERROR_CHECK(err_code);
-
     err_code = bluetooth_init();
     APP_ERROR_CHECK(err_code);
 }
@@ -291,9 +302,12 @@ static void conn_params_init(void)
 */
 static void application_timers_start(void)
 {
-    
     ret_code_t err_code;
-    err_code = app_timer_start(timer_timer,500,NULL);
+    err_code = app_timer_start(timer_timer,(uint32_t)Timer_time*1,NULL);//1 second
+    APP_ERROR_CHECK(err_code); 
+		err_code = app_timer_start(timer_timer_2,(uint32_t)Timer_time*101,NULL);//101 second
+    APP_ERROR_CHECK(err_code); 
+		err_code = app_timer_start(timer_button,(uint32_t)Timer_time*0.1,NULL);//0.1 second
     APP_ERROR_CHECK(err_code); 
 }
 
@@ -332,7 +346,6 @@ static void on_adv_evt(ble_adv_evt_t ble_adv_evt)
     switch (ble_adv_evt)
     {
         case BLE_ADV_EVT_FAST:
-            NRF_LOG_INFO("Fast advertising.\r\n");
             err_code = bsp_indication_set(BSP_INDICATE_ADVERTISING);
             APP_ERROR_CHECK(err_code);
             break;
@@ -455,7 +468,7 @@ static void ble_stack_init(void)
 
     // Configure the number of custom UUIDS.
     memset(&ble_cfg, 0, sizeof(ble_cfg));
-    ble_cfg.common_cfg.vs_uuid_cfg.vs_uuid_count = 0;
+    ble_cfg.common_cfg.vs_uuid_cfg.vs_uuid_count = 1;
     err_code = sd_ble_cfg_set(BLE_COMMON_CFG_VS_UUID, &ble_cfg, ram_start);
     APP_ERROR_CHECK(err_code);
 
@@ -670,18 +683,13 @@ static void advertising_init(void)
 
     // Build advertising data struct to pass into @ref ble_advertising_init.
     memset(&advdata, 0, sizeof(advdata));
-	
-			
 
     advdata.name_type               = BLE_ADVDATA_FULL_NAME;
     advdata.include_appearance      = true;
     advdata.flags                   = BLE_GAP_ADV_FLAGS_LE_ONLY_GENERAL_DISC_MODE;
     advdata.uuids_complete.uuid_cnt = sizeof(m_adv_uuids) / sizeof(m_adv_uuids[0]);
     advdata.uuids_complete.p_uuids  = m_adv_uuids;
-		uint8_t data[]                      = "Inteligentny_dom";
-		advdata.p_manuf_specific_data->company_identifier   =0x0059;
-		advdata.p_manuf_specific_data->data.p_data          =data;
-		advdata.p_manuf_specific_data->data.size						=sizeof(data);
+
     ble_adv_modes_config_t options = {0};
     options.ble_adv_fast_enabled  = true;
     options.ble_adv_fast_interval = APP_ADV_INTERVAL;
@@ -738,17 +746,16 @@ static void power_manage(void)
 int main(void)
 {
     bool erase_bonds;
-
     // Initialize.
     log_init();
     timers_init();
-    buttons_leds_init(&erase_bonds);
-    ble_stack_init();
+    buttons_leds_init(&erase_bonds);	
+    ble_stack_init();	
     peer_manager_init(erase_bonds);
     if (erase_bonds == true)
     {
         NRF_LOG_INFO("Bonds erased!\r\n");
-    }
+    }	
     gap_params_init();
     gatt_init();
     advertising_init();
@@ -758,15 +765,17 @@ int main(void)
     // Start execution.
     application_timers_start();
     NRF_LOG_INFO("Bluetooth Dev Studio example started.\r\n");
-
+    //nrf_temp_init();
     advertising_start();
-		bsp_board_led_on(1);
+		bsp_board_buttons_init();
     // Enter main loop.
     for (;;)
     {
         if (NRF_LOG_PROCESS() == false)
         {
             power_manage();
+					//bsp_board_led_on(1);
+					//NRF_LOG_INFO("Bluetooth.  %d\n",err_code);
         }
     }
 }

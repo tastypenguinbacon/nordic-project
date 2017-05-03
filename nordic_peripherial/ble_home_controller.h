@@ -16,7 +16,6 @@ typedef enum
 { 
     BLE_HOME_CONTROLLER_TEMPERATURE_EVT_NOTIFICATION_ENABLED,  /**< Temperature value notification enabled event. */
     BLE_HOME_CONTROLLER_TEMPERATURE_EVT_NOTIFICATION_DISABLED, /**< Temperature value notification disabled event. */
-    BLE_HOME_CONTROLLER_TEMPERATURE_EVT_WRITE, /**< Temperature write event. */
     BLE_HOME_CONTROLLER_LIGHT_CONTROLLER_EVT_NOTIFICATION_ENABLED,  /**< Light_controller value notification enabled event. */
     BLE_HOME_CONTROLLER_LIGHT_CONTROLLER_EVT_NOTIFICATION_DISABLED, /**< Light_controller value notification disabled event. */
     BLE_HOME_CONTROLLER_LIGHT_CONTROLLER_EVT_WRITE, /**< Light_controller write event. */
@@ -49,7 +48,6 @@ typedef struct
     ble_home_controller_evt_type_t evt_type;    /**< Type of event. */
     union {
         uint16_t cccd_value; /**< Holds decoded data in Notify and Indicate event handler. */
-        ble_home_controller_temperature_t temperature; /**< Holds decoded data in Write event handler. */
         ble_home_controller_light_controller_t light_controller; /**< Holds decoded data in Write event handler. */
     } params;
 } ble_home_controller_evt_t;
@@ -89,6 +87,19 @@ uint32_t ble_home_controller_init(ble_home_controller_t * p_home_controller, con
 /**@brief Function for handling the Application's BLE Stack events.*/
 void ble_home_controller_on_ble_evt(ble_home_controller_t * p_home_controller, ble_evt_t * p_ble_evt);
 
+/**@brief Function for setting the Temperature.
+ *
+ * @details Sets a new value of the Temperature characteristic. The new value will be sent
+ *          to the client the next time the client reads the Temperature characteristic.
+ *          This function is only generated if the characteristic's Read property is not 'Excluded'.
+ *
+ * @param[in]   p_home_controller                 Home_controller Service structure.
+ * @param[in]   p_temperature  New Temperature.
+ *
+ * @return      NRF_SUCCESS on success, otherwise an error code.
+ */
+uint32_t ble_home_controller_temperature_set(ble_home_controller_t * p_home_controller, ble_home_controller_temperature_t * p_temperature);
+
 /**@brief Function for setting the Light_controller.
  *
  * @details Sets a new value of the Light_controller characteristic. The new value will be sent
@@ -101,5 +112,5 @@ void ble_home_controller_on_ble_evt(ble_home_controller_t * p_home_controller, b
  * @return      NRF_SUCCESS on success, otherwise an error code.
  */
 uint32_t ble_home_controller_light_controller_set(ble_home_controller_t * p_home_controller, ble_home_controller_light_controller_t * p_light_controller);
-uint32_t ble_home_controller_temperature_controller_set(ble_home_controller_t * p_home_controller, ble_home_controller_temperature_t * p_temperature_controller);
+
 #endif //_BLE_HOME_CONTROLLER_H__

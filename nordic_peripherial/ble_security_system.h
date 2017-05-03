@@ -11,18 +11,16 @@
 
 
 
-/**@brief Security_system event type. */
+/**@brief security_system event type. */
 typedef enum
 { 
-    BLE_SECURITY_SYSTEM_MOTIONS_SENSOR_EVT_NOTIFICATION_ENABLED,  /**< motions_sensor value notification enabled event. */
-    BLE_SECURITY_SYSTEM_MOTIONS_SENSOR_EVT_NOTIFICATION_DISABLED, /**< motions_sensor value notification disabled event. */
-    BLE_SECURITY_SYSTEM_MOTIONS_SENSOR_EVT_WRITE, /**< motions_sensor write event. */
-    BLE_SECURITY_SYSTEM_DOOR_CONTROLLER_EVT_NOTIFICATION_ENABLED,  /**< Door_controller value notification enabled event. */
-    BLE_SECURITY_SYSTEM_DOOR_CONTROLLER_EVT_NOTIFICATION_DISABLED, /**< Door_controller value notification disabled event. */
-    BLE_SECURITY_SYSTEM_DOOR_CONTROLLER_EVT_WRITE, /**< Door_controller write event. */
-    BLE_SECURITY_SYSTEM_DOOR_LOCK_EVT_NOTIFICATION_ENABLED,  /**< Door_lock value notification enabled event. */
-    BLE_SECURITY_SYSTEM_DOOR_LOCK_EVT_NOTIFICATION_DISABLED, /**< Door_lock value notification disabled event. */
-    BLE_SECURITY_SYSTEM_DOOR_LOCK_EVT_WRITE, /**< Door_lock write event. */
+    BLE_SECURITY_SYSTEM_MOVE_SENSORS_EVT_NOTIFICATION_ENABLED,  /**< move_sensors value notification enabled event. */
+    BLE_SECURITY_SYSTEM_MOVE_SENSORS_EVT_NOTIFICATION_DISABLED, /**< move_sensors value notification disabled event. */
+    BLE_SECURITY_SYSTEM_DOOR_LOCK_EVT_NOTIFICATION_ENABLED,  /**< door_lock value notification enabled event. */
+    BLE_SECURITY_SYSTEM_DOOR_LOCK_EVT_NOTIFICATION_DISABLED, /**< door_lock value notification disabled event. */
+    BLE_SECURITY_SYSTEM_DOOR_LOCK_EVT_WRITE, /**< door_lock write event. */
+    BLE_SECURITY_SYSTEM_DOOR_CONTROLLER_EVT_NOTIFICATION_ENABLED,  /**< door_controller value notification enabled event. */
+    BLE_SECURITY_SYSTEM_DOOR_CONTROLLER_EVT_NOTIFICATION_DISABLED, /**< door_controller value notification disabled event. */
 } ble_security_system_evt_type_t;
 
 // Forward declaration of the ble_security_system_t type.
@@ -35,63 +33,59 @@ typedef struct ble_security_system_s ble_security_system_t;
 
 
 
-/**@brief motions_sensor structure. */
+/**@brief move_sensors structure. */
 typedef struct
 {
     uint8_t sensor_1;
-    uint32_t sensor_1_time;
     uint8_t sensor_2;
-    uint32_t sensor_2_time;
-} ble_security_system_motions_sensor_t;
-/**@brief Door_controller structure. */
+} ble_security_system_move_sensors_t;
+/**@brief door_lock structure. */
 typedef struct
 {
-    uint8_t door_close;
-} ble_security_system_door_controller_t;
-/**@brief Door_lock structure. */
-typedef struct
-{
-    uint8_t d_lock;
+    uint8_t door_closed;
 } ble_security_system_door_lock_t;
+/**@brief door_controller structure. */
+typedef struct
+{
+    uint8_t door_control;
+} ble_security_system_door_controller_t;
 
-/**@brief Security_system Service event. */
+/**@brief security_system Service event. */
 typedef struct
 {
     ble_security_system_evt_type_t evt_type;    /**< Type of event. */
     union {
         uint16_t cccd_value; /**< Holds decoded data in Notify and Indicate event handler. */
-        ble_security_system_motions_sensor_t motions_sensor; /**< Holds decoded data in Write event handler. */
-        ble_security_system_door_controller_t door_controller; /**< Holds decoded data in Write event handler. */
         ble_security_system_door_lock_t door_lock; /**< Holds decoded data in Write event handler. */
     } params;
 } ble_security_system_evt_t;
 
-/**@brief Security_system Service event handler type. */
+/**@brief security_system Service event handler type. */
 typedef void (*ble_security_system_evt_handler_t) (ble_security_system_t * p_security_system, ble_security_system_evt_t * p_evt);
 
-/**@brief Security_system Service init structure. This contains all options and data needed for initialization of the service */
+/**@brief security_system Service init structure. This contains all options and data needed for initialization of the service */
 typedef struct
 {
-    ble_security_system_evt_handler_t     evt_handler; /**< Event handler to be called for handling events in the Security_system Service. */
-    ble_security_system_motions_sensor_t ble_security_system_motions_sensor_initial_value; /**< If not NULL, initial value of the motions_sensor characteristic. */ 
-    ble_security_system_door_controller_t ble_security_system_door_controller_initial_value; /**< If not NULL, initial value of the Door_controller characteristic. */ 
-    ble_security_system_door_lock_t ble_security_system_door_lock_initial_value; /**< If not NULL, initial value of the Door_lock characteristic. */ 
+    ble_security_system_evt_handler_t     evt_handler; /**< Event handler to be called for handling events in the security_system Service. */
+    ble_security_system_move_sensors_t ble_security_system_move_sensors_initial_value; /**< If not NULL, initial value of the move_sensors characteristic. */ 
+    ble_security_system_door_lock_t ble_security_system_door_lock_initial_value; /**< If not NULL, initial value of the door_lock characteristic. */ 
+    ble_security_system_door_controller_t ble_security_system_door_controller_initial_value; /**< If not NULL, initial value of the door_controller characteristic. */ 
 } ble_security_system_init_t;
 
-/**@brief Security_system Service structure. This contains various status information for the service.*/
+/**@brief security_system Service structure. This contains various status information for the service.*/
 struct ble_security_system_s
 {
-    ble_security_system_evt_handler_t evt_handler; /**< Event handler to be called for handling events in the Security_system Service. */
-    uint16_t service_handle; /**< Handle of Security_system Service (as provided by the BLE stack). */
-    ble_gatts_char_handles_t motions_sensor_handles; /**< Handles related to the motions_sensor characteristic. */
-    ble_gatts_char_handles_t door_controller_handles; /**< Handles related to the Door_controller characteristic. */
-    ble_gatts_char_handles_t door_lock_handles; /**< Handles related to the Door_lock characteristic. */
+    ble_security_system_evt_handler_t evt_handler; /**< Event handler to be called for handling events in the security_system Service. */
+    uint16_t service_handle; /**< Handle of security_system Service (as provided by the BLE stack). */
+    ble_gatts_char_handles_t move_sensors_handles; /**< Handles related to the move_sensors characteristic. */
+    ble_gatts_char_handles_t door_lock_handles; /**< Handles related to the door_lock characteristic. */
+    ble_gatts_char_handles_t door_controller_handles; /**< Handles related to the door_controller characteristic. */
     uint16_t conn_handle; /**< Handle of the current connection (as provided by the BLE stack, is BLE_CONN_HANDLE_INVALID if not in a connection). */
 };
 
-/**@brief Function for initializing the Security_system.
+/**@brief Function for initializing the security_system.
  *
- * @param[out]  p_security_system       Security_system Service structure. This structure will have to be supplied by
+ * @param[out]  p_security_system       security_system Service structure. This structure will have to be supplied by
  *                          the application. It will be initialized by this function, and will later
  *                          be used to identify this particular service instance.
  * @param[in]   p_security_system_init  Information needed to initialize the service.
@@ -103,19 +97,30 @@ uint32_t ble_security_system_init(ble_security_system_t * p_security_system, con
 /**@brief Function for handling the Application's BLE Stack events.*/
 void ble_security_system_on_ble_evt(ble_security_system_t * p_security_system, ble_evt_t * p_ble_evt);
 
-/**@brief Function for setting the Door_lock.
+/**@brief Function for setting the move_sensors.
  *
- * @details Sets a new value of the Door_lock characteristic. The new value will be sent
- *          to the client the next time the client reads the Door_lock characteristic.
+ * @details Sets a new value of the move_sensors characteristic. The new value will be sent
+ *          to the client the next time the client reads the move_sensors characteristic.
  *          This function is only generated if the characteristic's Read property is not 'Excluded'.
  *
- * @param[in]   p_security_system                 Security_system Service structure.
- * @param[in]   p_door_lock  New Door_lock.
+ * @param[in]   p_security_system                 security_system Service structure.
+ * @param[in]   p_move_sensors  New move_sensors.
  *
  * @return      NRF_SUCCESS on success, otherwise an error code.
  */
-uint32_t ble_security_system_door_lock_set(ble_security_system_t * p_security_system, ble_security_system_door_lock_t * p_door_lock);
-uint32_t ble_security_system_door_controller_set(ble_security_system_t * p_security_system, ble_security_system_door_controller_t * p_door_lock);
-uint32_t ble_security_system_motions_sensor_set(ble_security_system_t * p_security_system, ble_security_system_motions_sensor_t * p_sensors);
+uint32_t ble_security_system_move_sensors_set(ble_security_system_t * p_security_system, ble_security_system_move_sensors_t * p_move_sensors);
+
+/**@brief Function for setting the door_controller.
+ *
+ * @details Sets a new value of the door_controller characteristic. The new value will be sent
+ *          to the client the next time the client reads the door_controller characteristic.
+ *          This function is only generated if the characteristic's Read property is not 'Excluded'.
+ *
+ * @param[in]   p_security_system                 security_system Service structure.
+ * @param[in]   p_door_controller  New door_controller.
+ *
+ * @return      NRF_SUCCESS on success, otherwise an error code.
+ */
+uint32_t ble_security_system_door_controller_set(ble_security_system_t * p_security_system, ble_security_system_door_controller_t * p_door_controller);
 
 #endif //_BLE_SECURITY_SYSTEM_H__
