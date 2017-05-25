@@ -19,6 +19,10 @@ typedef enum
     BLE_HOME_CONTROLLER_LIGHT_CONTROLLER_EVT_NOTIFICATION_ENABLED,  /**< Light_controller value notification enabled event. */
     BLE_HOME_CONTROLLER_LIGHT_CONTROLLER_EVT_NOTIFICATION_DISABLED, /**< Light_controller value notification disabled event. */
     BLE_HOME_CONTROLLER_LIGHT_CONTROLLER_EVT_WRITE, /**< Light_controller write event. */
+    BLE_HOME_CONTROLLER_LIGHT_INTENSITY_EVT_NOTIFICATION_ENABLED,  /**< Light_intensity value notification enabled event. */
+    BLE_HOME_CONTROLLER_LIGHT_INTENSITY_EVT_NOTIFICATION_DISABLED, /**< Light_intensity value notification disabled event. */
+    BLE_HOME_CONTROLLER_HUMIDITY_EVT_NOTIFICATION_ENABLED,  /**< Humidity value notification enabled event. */
+    BLE_HOME_CONTROLLER_HUMIDITY_EVT_NOTIFICATION_DISABLED, /**< Humidity value notification disabled event. */
 } ble_home_controller_evt_type_t;
 
 // Forward declaration of the ble_home_controller_t type.
@@ -34,13 +38,23 @@ typedef struct ble_home_controller_s ble_home_controller_t;
 /**@brief Temperature structure. */
 typedef struct
 {
-    uint32_t temperature_value;
+    int16_t temperature_value;
 } ble_home_controller_temperature_t;
 /**@brief Light_controller structure. */
 typedef struct
 {
     uint8_t light;
 } ble_home_controller_light_controller_t;
+/**@brief Light_intensity structure. */
+typedef struct
+{
+    uint8_t light_intensiity_value;
+} ble_home_controller_light_intensity_t;
+/**@brief Humidity structure. */
+typedef struct
+{
+    uint8_t humidity_value;
+} ble_home_controller_humidity_t;
 
 /**@brief Home_controller Service event. */
 typedef struct
@@ -61,6 +75,8 @@ typedef struct
     ble_home_controller_evt_handler_t     evt_handler; /**< Event handler to be called for handling events in the Home_controller Service. */
     ble_home_controller_temperature_t ble_home_controller_temperature_initial_value; /**< If not NULL, initial value of the Temperature characteristic. */ 
     ble_home_controller_light_controller_t ble_home_controller_light_controller_initial_value; /**< If not NULL, initial value of the Light_controller characteristic. */ 
+    ble_home_controller_light_intensity_t ble_home_controller_light_intensity_initial_value; /**< If not NULL, initial value of the Light_intensity characteristic. */ 
+    ble_home_controller_humidity_t ble_home_controller_humidity_initial_value; /**< If not NULL, initial value of the Humidity characteristic. */ 
 } ble_home_controller_init_t;
 
 /**@brief Home_controller Service structure. This contains various status information for the service.*/
@@ -70,6 +86,8 @@ struct ble_home_controller_s
     uint16_t service_handle; /**< Handle of Home_controller Service (as provided by the BLE stack). */
     ble_gatts_char_handles_t temperature_handles; /**< Handles related to the Temperature characteristic. */
     ble_gatts_char_handles_t light_controller_handles; /**< Handles related to the Light_controller characteristic. */
+    ble_gatts_char_handles_t light_intensity_handles; /**< Handles related to the Light_intensity characteristic. */
+    ble_gatts_char_handles_t humidity_handles; /**< Handles related to the Humidity characteristic. */
     uint16_t conn_handle; /**< Handle of the current connection (as provided by the BLE stack, is BLE_CONN_HANDLE_INVALID if not in a connection). */
 };
 
@@ -112,5 +130,31 @@ uint32_t ble_home_controller_temperature_set(ble_home_controller_t * p_home_cont
  * @return      NRF_SUCCESS on success, otherwise an error code.
  */
 uint32_t ble_home_controller_light_controller_set(ble_home_controller_t * p_home_controller, ble_home_controller_light_controller_t * p_light_controller);
+
+/**@brief Function for setting the Light_intensity.
+ *
+ * @details Sets a new value of the Light_intensity characteristic. The new value will be sent
+ *          to the client the next time the client reads the Light_intensity characteristic.
+ *          This function is only generated if the characteristic's Read property is not 'Excluded'.
+ *
+ * @param[in]   p_home_controller                 Home_controller Service structure.
+ * @param[in]   p_light_intensity  New Light_intensity.
+ *
+ * @return      NRF_SUCCESS on success, otherwise an error code.
+ */
+uint32_t ble_home_controller_light_intensity_set(ble_home_controller_t * p_home_controller, ble_home_controller_light_intensity_t * p_light_intensity);
+
+/**@brief Function for setting the Humidity.
+ *
+ * @details Sets a new value of the Humidity characteristic. The new value will be sent
+ *          to the client the next time the client reads the Humidity characteristic.
+ *          This function is only generated if the characteristic's Read property is not 'Excluded'.
+ *
+ * @param[in]   p_home_controller                 Home_controller Service structure.
+ * @param[in]   p_humidity  New Humidity.
+ *
+ * @return      NRF_SUCCESS on success, otherwise an error code.
+ */
+uint32_t ble_home_controller_humidity_set(ble_home_controller_t * p_home_controller, ble_home_controller_humidity_t * p_humidity);
 
 #endif //_BLE_HOME_CONTROLLER_H__

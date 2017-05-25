@@ -19,8 +19,8 @@ typedef enum
     BLE_SECURITY_SYSTEM_DOOR_LOCK_EVT_NOTIFICATION_ENABLED,  /**< door_lock value notification enabled event. */
     BLE_SECURITY_SYSTEM_DOOR_LOCK_EVT_NOTIFICATION_DISABLED, /**< door_lock value notification disabled event. */
     BLE_SECURITY_SYSTEM_DOOR_LOCK_EVT_WRITE, /**< door_lock write event. */
-    BLE_SECURITY_SYSTEM_DOOR_CONTROLLER_EVT_NOTIFICATION_ENABLED,  /**< door_controller value notification enabled event. */
-    BLE_SECURITY_SYSTEM_DOOR_CONTROLLER_EVT_NOTIFICATION_DISABLED, /**< door_controller value notification disabled event. */
+    BLE_SECURITY_SYSTEM_DOOR_CHECK_EVT_NOTIFICATION_ENABLED,  /**< door_check value notification enabled event. */
+    BLE_SECURITY_SYSTEM_DOOR_CHECK_EVT_NOTIFICATION_DISABLED, /**< door_check value notification disabled event. */
 } ble_security_system_evt_type_t;
 
 // Forward declaration of the ble_security_system_t type.
@@ -37,18 +37,17 @@ typedef struct ble_security_system_s ble_security_system_t;
 typedef struct
 {
     uint8_t sensor_1;
-    uint8_t sensor_2;
 } ble_security_system_move_sensors_t;
 /**@brief door_lock structure. */
 typedef struct
 {
     uint8_t door_closed;
 } ble_security_system_door_lock_t;
-/**@brief door_controller structure. */
+/**@brief door_check structure. */
 typedef struct
 {
     uint8_t door_control;
-} ble_security_system_door_controller_t;
+} ble_security_system_door_check_t;
 
 /**@brief security_system Service event. */
 typedef struct
@@ -69,7 +68,7 @@ typedef struct
     ble_security_system_evt_handler_t     evt_handler; /**< Event handler to be called for handling events in the security_system Service. */
     ble_security_system_move_sensors_t ble_security_system_move_sensors_initial_value; /**< If not NULL, initial value of the move_sensors characteristic. */ 
     ble_security_system_door_lock_t ble_security_system_door_lock_initial_value; /**< If not NULL, initial value of the door_lock characteristic. */ 
-    ble_security_system_door_controller_t ble_security_system_door_controller_initial_value; /**< If not NULL, initial value of the door_controller characteristic. */ 
+    ble_security_system_door_check_t ble_security_system_door_check_initial_value; /**< If not NULL, initial value of the door_check characteristic. */ 
 } ble_security_system_init_t;
 
 /**@brief security_system Service structure. This contains various status information for the service.*/
@@ -79,7 +78,7 @@ struct ble_security_system_s
     uint16_t service_handle; /**< Handle of security_system Service (as provided by the BLE stack). */
     ble_gatts_char_handles_t move_sensors_handles; /**< Handles related to the move_sensors characteristic. */
     ble_gatts_char_handles_t door_lock_handles; /**< Handles related to the door_lock characteristic. */
-    ble_gatts_char_handles_t door_controller_handles; /**< Handles related to the door_controller characteristic. */
+    ble_gatts_char_handles_t door_check_handles; /**< Handles related to the door_check characteristic. */
     uint16_t conn_handle; /**< Handle of the current connection (as provided by the BLE stack, is BLE_CONN_HANDLE_INVALID if not in a connection). */
 };
 
@@ -110,17 +109,17 @@ void ble_security_system_on_ble_evt(ble_security_system_t * p_security_system, b
  */
 uint32_t ble_security_system_move_sensors_set(ble_security_system_t * p_security_system, ble_security_system_move_sensors_t * p_move_sensors);
 
-/**@brief Function for setting the door_controller.
+/**@brief Function for setting the door_check.
  *
- * @details Sets a new value of the door_controller characteristic. The new value will be sent
- *          to the client the next time the client reads the door_controller characteristic.
+ * @details Sets a new value of the door_check characteristic. The new value will be sent
+ *          to the client the next time the client reads the door_check characteristic.
  *          This function is only generated if the characteristic's Read property is not 'Excluded'.
  *
  * @param[in]   p_security_system                 security_system Service structure.
- * @param[in]   p_door_controller  New door_controller.
+ * @param[in]   p_door_check  New door_check.
  *
  * @return      NRF_SUCCESS on success, otherwise an error code.
  */
-uint32_t ble_security_system_door_controller_set(ble_security_system_t * p_security_system, ble_security_system_door_controller_t * p_door_controller);
+uint32_t ble_security_system_door_check_set(ble_security_system_t * p_security_system, ble_security_system_door_check_t * p_door_check);
 
 #endif //_BLE_SECURITY_SYSTEM_H__
