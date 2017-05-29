@@ -58,6 +58,7 @@ TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF TH
 #include "nrf_log_ctrl.h"
 #include "ble_home_controller.h" 
 
+
 #include "app_pwm.h"
 #include "nrf_saadc.h"
 #include "nrf_drv_saadc.h"
@@ -98,9 +99,12 @@ static nrf_ble_gatt_t                    m_gatt;                                
 static ble_uuid_t m_adv_uuids[] = {{BLE_UUID_DEVICE_INFORMATION_SERVICE, BLE_UUID_TYPE_BLE}}; /**< Universally unique service identifiers. */
 
 #define Timer_time APP_TIMER_TICKS(1000) 
-APP_TIMER_DEF(timer_timer); 
+APP_TIMER_DEF(timer_button);
 APP_TIMER_DEF(timer_timer_2); 
-APP_TIMER_DEF(timer_button); 
+APP_TIMER_DEF(timer_timers); 
+
+
+
 
 /**@brief Callback function for asserts in the SoftDevice.
  *
@@ -155,7 +159,7 @@ static void timers_init(void)
 		
     // Create timers.
 		
-    err_code = app_timer_create(&timer_timer, APP_TIMER_MODE_REPEATED, timer_handler);
+    err_code = app_timer_create(&timer_timers, APP_TIMER_MODE_REPEATED, timer_handlerr);
     APP_ERROR_CHECK(err_code); 
 		err_code = app_timer_create(&timer_timer_2, APP_TIMER_MODE_REPEATED, timer_handler_2);
     APP_ERROR_CHECK(err_code); 
@@ -287,7 +291,7 @@ static void conn_params_init(void)
 static void application_timers_start(void)
 {
     ret_code_t err_code;
-    err_code = app_timer_start(timer_timer,(uint32_t)Timer_time*1,NULL);//1 second
+    err_code = app_timer_start(timer_timers,(uint32_t)Timer_time*1,NULL);//1 second
     APP_ERROR_CHECK(err_code); 
 		err_code = app_timer_start(timer_timer_2,(uint32_t)Timer_time*101,NULL);//101 second
     APP_ERROR_CHECK(err_code); 
@@ -749,21 +753,18 @@ int main(void)
     // Start execution.
     application_timers_start();
     NRF_LOG_INFO("Bluetooth Dev Studio example started.\r\n");
-    //nrf_temp_init();
     advertising_start();
 		bsp_board_buttons_init();
+	
     // Enter main loop.
     for (;;)
     {
         if (NRF_LOG_PROCESS() == false)
         {
             power_manage();
-					//bsp_board_led_on(1);
-					//NRF_LOG_INFO("Bluetooth.  %d\n",err_code);
+					 //NRF_LOG_INFO("Elektryczny zamek wlaczony \r\n");
         }
     }
 }
 
-/**
- * @}
- */
+

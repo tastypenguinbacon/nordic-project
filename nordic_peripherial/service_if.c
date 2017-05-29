@@ -1,13 +1,12 @@
 
+
 /*
 Copyright (c) 2017, Witold Gebarowski.
 All rights reserved.
-
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
 1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 3. Neither the name of the copyright holder nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
-
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
 IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE 
 FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR 
@@ -41,10 +40,19 @@ TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF TH
 APP_PWM_INSTANCE(PWM1,2);   
 
 
+#define LED_OUTPUT 24
+#define DOOR_LED_OUTPUT 19
+#define DOOR_INPUT 20
+#define MOVE_SENSOR_INPUT 25
+#define HUMIDITY_INPUT 2
+#define BUTTON_UP 22
+#define BUTTON_DOWN 23
+
+
 static ble_home_controller_t    m_home_controller; 
 static ble_security_system_t    m_security_system; 
 
-static uint8_t light_memory;
+static int8_t light_memory;
 static uint8_t timer_memory;
 static bool door_controler_LOG;
 
@@ -54,30 +62,15 @@ void pwm_ready_callback(uint32_t pwm_id)    // PWM callback function
 {ready_flag = true;}
 
 
-void light_set(uint8_t light)
+void light_set(int8_t light)
 {
 		if(light>100)light=100;
-		if(light<1)light=1;
-		app_pwm_channel_duty_set(&PWM1, 1, (app_pwm_duty_t)light);//value1-100;
-	  app_pwm_channel_duty_set(&PWM1, 0, (app_pwm_duty_t)light);	
+		if(light<0)light=0;
+		app_pwm_channel_duty_set(&PWM1, 1, (app_pwm_duty_t)light+1);//value1-100;
+	  app_pwm_channel_duty_set(&PWM1, 0, (app_pwm_duty_t)light+1);	
 		
 }	
-void timer_handler_button(void * p_context)
-{	
-		UNUSED_PARAMETER(p_context);
-		if(bsp_board_button_state_get((uint32_t)2))
-		{		
-				if (timer_memory==0) light_memory=light_memory-10;
-				timer_memory=1;
-		}
-		if(bsp_board_button_state_get((uint32_t)3))
-		{		
-				if (timer_memory==0) light_memory=light_memory+10;
-				timer_memory=1;
-		}
-		if (light_memory>100) light_memory=100;
-		if (light_memory<10) light_memory=10;
-}
+
 
 static void humidity_meassure(void)
 {
@@ -85,33 +78,33 @@ static void humidity_meassure(void)
 	
 		uint8_t dane=0;
 		char maska=1;
-		nrf_gpio_pin_clear((uint32_t)18);
+		nrf_gpio_pin_clear((uint32_t)HUMIDITY_INPUT);
 		nrf_delay_ms(25);
-		nrf_gpio_pin_set((uint32_t)18);
+		nrf_gpio_pin_set((uint32_t)HUMIDITY_INPUT);
 		nrf_delay_us(30);
-		nrf_gpio_pin_clear((uint32_t)18);
-		nrf_gpio_cfg_input((uint32_t)18,NRF_GPIO_PIN_NOPULL);
+		nrf_gpio_pin_clear((uint32_t)HUMIDITY_INPUT);
+		nrf_gpio_cfg_input((uint32_t)HUMIDITY_INPUT,NRF_GPIO_PIN_NOPULL);
 
 		nrf_delay_us(30);
-		while(!nrf_gpio_pin_read((uint32_t)18)){
+		while(!nrf_gpio_pin_read((uint32_t)HUMIDITY_INPUT)){
 		}
-		while(nrf_gpio_pin_read((uint32_t)18)){
+		while(nrf_gpio_pin_read((uint32_t)HUMIDITY_INPUT)){
 		}
 
     for(int i=0;i<8;i++)
     {
-      while(!nrf_gpio_pin_read((uint32_t)18)){
+      while(!nrf_gpio_pin_read((uint32_t)HUMIDITY_INPUT)){
       }
       nrf_delay_us(35);
-      if(nrf_gpio_pin_read((uint32_t)18))
+      if(nrf_gpio_pin_read((uint32_t)HUMIDITY_INPUT))
       {
         dane=dane|(maska<<(7-i));
-        while(nrf_gpio_pin_read((uint32_t)18)){
+        while(nrf_gpio_pin_read((uint32_t)HUMIDITY_INPUT)){
         }
       }
     }
-		nrf_gpio_cfg_output((uint32_t)18);
-		nrf_gpio_pin_set((uint32_t)18);
+		nrf_gpio_cfg_output((uint32_t)HUMIDITY_INPUT);
+		nrf_gpio_pin_set((uint32_t)HUMIDITY_INPUT);
 		NRF_LOG_INFO("Poziom wilgotnosci %d%%\r\n", dane);	
 		p_humidity.humidity_value=dane;
 		ble_home_controller_humidity_set(&m_home_controller,&p_humidity);	
@@ -144,15 +137,15 @@ static void security_parameter_send(void)
 		ble_security_system_move_sensors_t  p_move_sensors;
 		ble_security_system_door_check_t p_door_check;
 	
-		p_door_check.door_control=(uint8_t)nrf_gpio_pin_read((uint32_t)6);
-		p_move_sensors.sensor_1=(uint8_t)nrf_gpio_pin_read((uint32_t)8);
+		p_door_check.door_control=(uint8_t)nrf_gpio_pin_read((uint32_t)DOOR_INPUT);
+		p_move_sensors.sensor_1=(uint8_t)nrf_gpio_pin_read((uint32_t)MOVE_SENSOR_INPUT);
 	
 		ble_security_system_move_sensors_set(&m_security_system,&p_move_sensors);
 		ble_security_system_door_check_set(&m_security_system,&p_door_check);
 	
-		if(p_door_check.door_control==0)
-		NRF_LOG_INFO("Dzwi otwarte, ");	
 		if(p_door_check.door_control!=0)
+		NRF_LOG_INFO("Dzwi otwarte, ");	
+		if(p_door_check.door_control==0)
 		NRF_LOG_INFO("Dzwi zamkniete, ");	
 		if(door_controler_LOG!=0)
 		NRF_LOG_INFO("Elektryczny zamek wlaczony \r\n");	
@@ -165,17 +158,33 @@ static void security_parameter_send(void)
 
 }	
 
-void timer_handler(void * p_context)
-{	
-    UNUSED_PARAMETER(p_context);
+void timer_handlerr(void * p_context)
+{
+    //UNUSED_PARAMETER(p_context);
 	
 		light_send();
 		security_parameter_send();
 		temperature_meassure();
 		nrf_drv_saadc_sample();
-		humidity_meassure();
+		//humidity_meassure();
 }
 
+void timer_handler_button(void * p_context)
+{	
+		UNUSED_PARAMETER(p_context);
+		if(!nrf_gpio_pin_read((uint32_t)BUTTON_DOWN))
+		{		
+				if (timer_memory==0) light_memory=light_memory-10;
+				timer_memory=1;
+		}
+		if(!nrf_gpio_pin_read((uint32_t)BUTTON_UP))
+		{		
+				if (timer_memory==0) light_memory=light_memory+10;
+				timer_memory=1;
+		}
+		if (light_memory>100) light_memory=100;
+		if (light_memory<0) light_memory=0;
+}
 /**@brief Function for handling the Home_controller events.
  *
  * @details This function will be called for all Home_controller events which are passed to
@@ -190,7 +199,7 @@ static void on_home_controller_evt(ble_home_controller_t * p_home_controller, bl
     { 
         case BLE_HOME_CONTROLLER_LIGHT_CONTROLLER_EVT_WRITE:
 						light_memory=p_evt->params.light_controller.light;
-						light_set(p_evt->params.light_controller.light);
+						light_set((int8_t)p_evt->params.light_controller.light);
             //app_trace_log("[Bluetooth_IF]: HOME_CONTROLLER_LIGHT_CONTROLLER evt WRITE. \r\n");
             break; 
         default:
@@ -206,13 +215,13 @@ static void on_security_system_evt(ble_security_system_t * p_security_system, bl
         case BLE_SECURITY_SYSTEM_DOOR_LOCK_EVT_WRITE:
 						if(p_evt->params.door_lock.door_closed==0)
 						{
-							nrf_gpio_pin_clear((uint32_t)7);
-							door_controler_LOG=0;
+							nrf_gpio_pin_clear((uint32_t)DOOR_LED_OUTPUT);
+							door_controler_LOG=1;
 						}
 						else
 						{
-							nrf_gpio_pin_set((uint32_t)7);
-							door_controler_LOG=1;
+							nrf_gpio_pin_set((uint32_t)DOOR_LED_OUTPUT);
+							door_controler_LOG=0;
 						}				
             //app_trace_log("[Bluetooth_IF]: SECURITY_SYSTEM_DOOR_LOCK evt WRITE. \r\n");
             break; 
@@ -225,7 +234,7 @@ static void on_security_system_evt(ble_security_system_t * p_security_system, bl
 static void pwm_init(void)
 {
 	  //uint32_t    err_code; 
-		app_pwm_config_t pwm1_cfg = APP_PWM_DEFAULT_CONFIG_2CH(5000L, 12, 11);
+		app_pwm_config_t pwm1_cfg = APP_PWM_DEFAULT_CONFIG_2CH(5000L, LED_OUTPUT, 11);
     pwm1_cfg.pin_polarity[0] = APP_PWM_POLARITY_ACTIVE_HIGH;
 		pwm1_cfg.pin_polarity[1] = APP_PWM_POLARITY_ACTIVE_HIGH;
 		app_pwm_init(&PWM1,&pwm1_cfg,pwm_ready_callback);
@@ -272,15 +281,21 @@ static void adc_configure(void)
 }
 static void security_init()
 {
-		nrf_gpio_cfg_input((uint32_t)8,NRF_GPIO_PIN_NOPULL);//czujnik ruchu
-		nrf_gpio_cfg_input((uint32_t)6,NRF_GPIO_PIN_NOPULL);//przycisk drzwi
-		nrf_gpio_cfg_output((uint32_t)7);//zamykanie drzwi-dioda
+		nrf_gpio_cfg_input((uint32_t)MOVE_SENSOR_INPUT,NRF_GPIO_PIN_NOPULL);//czujnik ruchu
+		nrf_gpio_cfg_input((uint32_t)DOOR_INPUT,NRF_GPIO_PIN_NOPULL);//przycisk drzwi
+		nrf_gpio_cfg_output((uint32_t)DOOR_LED_OUTPUT);//zamykanie drzwi-dioda
 }
 
 static void humidity_init()
 {
-		nrf_gpio_cfg_output((uint32_t)18);
-		nrf_gpio_pin_set((uint32_t)18);
+		nrf_gpio_cfg_output((uint32_t)HUMIDITY_INPUT);
+		nrf_gpio_pin_set((uint32_t)HUMIDITY_INPUT);
+}
+
+static void button_init()
+{
+	nrf_gpio_cfg_input((uint32_t)BUTTON_UP,NRF_GPIO_PIN_NOPULL);
+	nrf_gpio_cfg_input((uint32_t)BUTTON_DOWN,NRF_GPIO_PIN_NOPULL);
 }
 
 /**@brief Function for initializing the Services generated by Bluetooth Developer Studio.
@@ -291,7 +306,8 @@ static void humidity_init()
 uint32_t bluetooth_init(void)
 {
     uint32_t    err_code; 
-	
+		
+		button_init();
 		pwm_init();
 		adc_configure();
 		humidity_init();
