@@ -1,6 +1,6 @@
-package io.github.tastypenguinbacon.peripherial.cache;
+package io.github.tastypenguinbacon.locator.cache;
 
-import io.github.tastypenguinbacon.peripherial.logger.SLF4JLogger;
+import io.github.tastypenguinbacon.locator.logger.SLF4JLogger;
 import javaslang.control.Option;
 import org.slf4j.Logger;
 

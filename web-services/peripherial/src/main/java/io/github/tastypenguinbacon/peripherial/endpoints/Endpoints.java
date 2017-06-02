@@ -20,6 +20,9 @@ public class Endpoints {
                 new Endpoint("methods", "/peripherial", "GET", "Returns the methods provided by the service."),
                 new Endpoint("heartbeat", "/peripherial/heartbeat/{station_id}", "POST", "Used for availability checks," +
                         " requires station identifier as parameter."),
+                new Endpoint("heartbeat", "/peripherial/heartbeat", "POST", "Used for availability checks, takes list of" +
+                        " available services identifiers, should be used when multiple a supervisor is in charge of multiple" +
+                        "stations"),
                 new Endpoint("message", "/peripherial/message/{station_id}", "POST", "Used for messages, accepts a JSON of" +
                         " the following form:" + exampleJsonMessage() + "."),
                 new Endpoint("tasks", "/peripherial/tasks/{station_id}/{after}", "GET", "Returns a JSON list of tasks scheduled" +

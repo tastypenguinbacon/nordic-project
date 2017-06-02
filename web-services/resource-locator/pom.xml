@@ -2,7 +2,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>io.github.tastypenguinbacon.nordic</groupId>
-    <artifactId>peripherial</artifactId>
+    <artifactId>resource-locator</artifactId>
     <packaging>war</packaging>
     <version>1.0-SNAPSHOT</version>
 
@@ -87,35 +87,8 @@
             <artifactId>guava</artifactId>
             <version>22.0</version>
         </dependency>
-
-        <!-- https://mvnrepository.com/artifact/com.sun.jersey/jersey-client -->
-        <!-- Jersey 2.19 -->
-        <dependency>
-            <groupId>org.glassfish.jersey.containers</groupId>
-            <artifactId>jersey-container-servlet</artifactId>
-            <version>${jersey2.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.glassfish.jersey.core</groupId>
-            <artifactId>jersey-server</artifactId>
-            <version>${jersey2.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.glassfish.jersey.core</groupId>
-            <artifactId>jersey-client</artifactId>
-            <version>${jersey2.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.glassfish.jersey.media</groupId>
-            <artifactId>jersey-media-multipart</artifactId>
-            <version>${jersey2.version}</version>
-            <scope>test</scope>
-        </dependency>
     </dependencies>
     <build>
-        <finalName>peripherial</finalName>
+        <finalName>resource-locator</finalName>
     </build>
 </project>

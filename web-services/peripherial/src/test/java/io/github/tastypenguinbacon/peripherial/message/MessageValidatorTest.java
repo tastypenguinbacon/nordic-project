@@ -4,6 +4,8 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import javax.validation.ConstraintValidatorContext;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
@@ -31,6 +33,7 @@ public class MessageValidatorTest {
     @DataProvider(name = "valid_messages")
     public Object[][] validMessageProvider() {
         return new Object[][]{
+                {new Message("ErroR", "TEST")},
                 {new Message("ERROR", "TEST")},
                 {new Message("STATUS", "HEJO")},
                 {new Message("REQUEST", "HEJO")}
@@ -39,13 +42,11 @@ public class MessageValidatorTest {
 
     @DataProvider(name = "invalid_messages")
     public Object[][] invalidMessageProvider() {
-        return new Object[][] {
-                {new Message("eRRor", "TEST")},
+        return new Object[][]{
                 {new Message("ERROR", "")},
                 {new Message(null, "TEST")},
                 {new Message("ERROR", null)},
                 {new Message(null, null)}
         };
     }
-
 }

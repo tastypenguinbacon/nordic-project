@@ -7,12 +7,13 @@ import javax.inject.Inject;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import java.util.List;
 
 /**
  * Created by pingwin on 26.05.17.
  */
 @Path("heartbeat")
-public class Heartbeat {
+public class HeartbeatResource {
     @Inject
     @SLF4JLogger
     private Logger logger;
@@ -25,5 +26,10 @@ public class Heartbeat {
     public void clientIsActive(@PathParam("station_id") String stationId) {
         logger.info("Received heartbeat from: " + stationId);
         heartbeatMonitor.updateAvailability(stationId);
+    }
+
+    @POST
+    public void clientsAreActive(List<String> stationIds) {
+        stationIds.forEach(this::clientIsActive);
     }
 }

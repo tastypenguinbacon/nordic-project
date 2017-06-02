@@ -4,10 +4,7 @@ import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import javax.validation.Valid;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
 /**
@@ -23,6 +20,7 @@ public class MessageResource {
 
     @POST
     @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
     @Path("{station_id}")
     public String consumeMessage(@PathParam("station_id") String stationId, @Valid Message message) {
         logger.info("{} sent message {}", stationId, message);

@@ -530,7 +530,7 @@
 
     <deployments>
         <deployment name="peripherial.war" runtime-name="peripherial.war">
-            <content sha1="00bda188817fcdd9cee92bfc66b5cdfa781c4419"/>
+            <content sha1="79db1c4ad6ff9ddaa9270b56810c404118a0c9e1"/>
         </deployment>
     </deployments>
 </server>

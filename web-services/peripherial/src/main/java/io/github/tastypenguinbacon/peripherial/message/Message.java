@@ -27,7 +27,7 @@ public class Message {
 
     public void setType(String type) {
         for (MessageType messageType : MessageType.values()) {
-            if (messageType.toString().equals(type))
+            if (messageType.toString().equalsIgnoreCase(type))
                 this.type = messageType;
         }
     }

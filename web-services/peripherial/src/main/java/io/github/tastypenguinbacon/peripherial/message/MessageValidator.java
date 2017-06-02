@@ -12,12 +12,6 @@ public class MessageValidator implements ConstraintValidator<ValidMessage, Messa
 
     @Override
     public boolean isValid(Message message, ConstraintValidatorContext context) {
-        if (message.getType() == null) {
-            return false;
-        }
-        if (message.getMessage() == null || message.getMessage().isEmpty()) {
-            return false;
-        }
-        return true;
+        return message.getType() != null && !(message.getMessage() == null || message.getMessage().isEmpty());
     }
 }

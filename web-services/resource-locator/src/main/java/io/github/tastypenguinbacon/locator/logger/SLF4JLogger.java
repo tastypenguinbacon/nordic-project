@@ -1,4 +1,4 @@
-package io.github.tastypenguinbacon.peripherial.logger;
+package io.github.tastypenguinbacon.locator.logger;
 
 import javax.inject.Qualifier;
 
