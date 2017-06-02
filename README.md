@@ -5,10 +5,10 @@ Domu. Głównym założeniem projektu jest prostota obsługi - system w założe
 przez prosty panel, lub aplikacje na telefonie (system przez dodatkowy moduł komunikuje się z
 serwerem). Cały projekt możemy podzielić na dwie części
 
-1.  jedna realizuje funkcje standardowego domu inteligentnego, tj. 
+1. Jedna realizuje funkcje standardowego domu inteligentnego, tj. 
 * sterowanie oświetleniem, 
 * kontrola temperatury w różnych miejscach domu, itp. 
-2.  Druga część systemu jest odpowiedzialna za kwestie bezpieczeństwa i od strony sprzętowej
+2. Druga część systemu jest odpowiedzialna za kwestie bezpieczeństwa i od strony sprzętowej
 zawiera: 
 * czujniki ruchu
 * breloczki do kluczy z wbudowanym beaconem
