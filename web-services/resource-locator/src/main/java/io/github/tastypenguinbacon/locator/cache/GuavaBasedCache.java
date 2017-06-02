@@ -3,6 +3,7 @@ package io.github.tastypenguinbacon.locator.cache;
 import com.google.common.cache.CacheBuilder;
 import io.github.tastypenguinbacon.locator.availability.ServiceLocation;
 
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -18,12 +19,12 @@ public class GuavaBasedCache implements Cache {
     }
 
     @Override
-    public boolean contains(String id) {
-        return cache.getIfPresent(id) != null;
+    public void update(String identifier, String location) {
+        cache.put(identifier, location);
     }
 
     @Override
-    public void update(String identifier, String location) {
-        cache.put(identifier, location);
+    public Map<String, String> getAll() {
+        return cache.asMap();
     }
 }

@@ -1,10 +1,12 @@
 package io.github.tastypenguinbacon.locator.cache;
 
+import java.util.Map;
+
 /**
  * Created by pingwin on 26.05.17.
  */
 public interface Cache {
-    boolean contains(String id);
-
     void update(String identifier, String location);
+
+    Map<String,String> getAll();
 }
