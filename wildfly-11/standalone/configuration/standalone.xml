@@ -36,7 +36,8 @@
     <system-properties>
         <property name="resource-locator" value="http://localhost:8080/resource-locator"/>
         <property name="peripherial" value="http://localhost:8080/peripherial"/>
-        <property name="resource-locator-timeout" value="10000"/>
+        <property name="message-processor" value="http://localhost:8080/message-processor"/>
+        <property name="resource-locator-timeout" value="120000"/>
     </system-properties>
 
 
@@ -536,10 +537,13 @@
 
     <deployments>
         <deployment name="resource-locator.war" runtime-name="resource-locator.war">
-            <content sha1="0ff5a95f7ed0154bef7440b6659e01bbb1175d09"/>
+            <content sha1="ade8d3d231e855c1adba3f4870b673fe05976046"/>
         </deployment>
         <deployment name="peripherial.war" runtime-name="peripherial.war">
-            <content sha1="0b9ca5cb45aa58288ebfd1ef9acd1b705460772c"/>
+            <content sha1="5d31353982a47438307d991208c772d7721766ed"/>
+        </deployment>
+        <deployment name="message-processor.war" runtime-name="message-processor.war">
+            <content sha1="f6dbd7924b5d3f5c1a3df2a9df0ac711603e331d"/>
         </deployment>
     </deployments>
 </server>
