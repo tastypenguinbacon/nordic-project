@@ -1,6 +1,7 @@
 package io.github.tastypenguinbacon.peripherial.rest;
 
 import io.github.tastypenguinbacon.peripherial.logger.SLF4JLogger;
+import io.github.tastypenguinbacon.peripherial.logger.SLF4JProducer;
 import javaslang.control.Option;
 import org.slf4j.Logger;
 
@@ -12,30 +13,28 @@ import javax.inject.Inject;
  * Created by pingwin on 01.06.17.
  */
 public class CommunicatorProviderProducer {
-    private final Logger logger;
 
     private final ResourceLocator resourceLocator;
 
+    private final SLF4JProducer loggerProducer;
+
     @Inject
-    public CommunicatorProviderProducer(@SLF4JLogger Logger logger, ResourceLocator resourceLocator) {
-        this.logger = logger;
+    public CommunicatorProviderProducer(@SLF4JLogger Logger logger, ResourceLocator resourceLocator, SLF4JProducer loggerProducer) {
         this.resourceLocator = resourceLocator;
+        this.loggerProducer = loggerProducer;
     }
 
     @Produces
-    public RestCommunicatorProvider producer(InjectionPoint ip) {
+    public CommunicatorProvider producer(InjectionPoint ip) {
+        Logger restLogger = loggerProducer.producer(ip);
         return Option.of(ip)
                 .map(InjectionPoint::getAnnotated)
                 .flatMap(a -> Option.of(a.getAnnotation(TargetService.class)))
                 .map(TargetService::name)
-                .map((String serviceName) -> new RestCommunicatorProvider(serviceName, resourceLocator))
+                .filter(name -> !name.equals("resource-locator"))
+                .map((String serviceName) -> new RestCommunicatorProvider(serviceName, resourceLocator, restLogger))
                 .flatMap(Option::of)
-                .getOrElseThrow(() -> exceptionOf(ip));
-    }
-
-    private RuntimeException exceptionOf(InjectionPoint ip) {
-        String message = "There is no TargetService annotation for: " + ip.getMember();
-        logger.error(message);
-        return new IllegalArgumentException(message);
+                .map(el -> (CommunicatorProvider) el)
+                .getOrElse(new ResourceLocatorCommunicatorProvider(restLogger));
     }
 }

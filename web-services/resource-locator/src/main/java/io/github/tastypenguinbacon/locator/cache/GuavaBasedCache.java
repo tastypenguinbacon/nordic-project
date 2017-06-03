@@ -1,7 +1,6 @@
 package io.github.tastypenguinbacon.locator.cache;
 
 import com.google.common.cache.CacheBuilder;
-import io.github.tastypenguinbacon.locator.availability.ServiceLocation;
 
 import java.util.Map;
 import java.util.concurrent.TimeUnit;

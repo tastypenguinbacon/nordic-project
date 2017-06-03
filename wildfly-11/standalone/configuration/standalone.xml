@@ -33,6 +33,12 @@
         <extension module="org.wildfly.extension.undertow"/>
     </extensions>
 
+    <system-properties>
+        <property name="resource-locator" value="http://localhost:8080/resource-locator"/>
+        <property name="peripherial" value="http://localhost:8080/peripherial"/>
+        <property name="resource-locator-timeout" value="10000"/>
+    </system-properties>
+
 
     <management>
         <security-realms>
@@ -529,8 +535,11 @@
     </socket-binding-group>
 
     <deployments>
+        <deployment name="resource-locator.war" runtime-name="resource-locator.war">
+            <content sha1="0ff5a95f7ed0154bef7440b6659e01bbb1175d09"/>
+        </deployment>
         <deployment name="peripherial.war" runtime-name="peripherial.war">
-            <content sha1="79db1c4ad6ff9ddaa9270b56810c404118a0c9e1"/>
+            <content sha1="0b9ca5cb45aa58288ebfd1ef9acd1b705460772c"/>
         </deployment>
     </deployments>
 </server>

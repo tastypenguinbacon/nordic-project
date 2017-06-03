@@ -1,5 +1,6 @@
 package io.github.tastypenguinbacon.peripherial.message;
 
+import io.github.tastypenguinbacon.peripherial.logger.SLF4JLogger;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
@@ -13,6 +14,7 @@ import javax.ws.rs.core.MediaType;
 @Path("message")
 public class MessageResource {
     @Inject
+    @SLF4JLogger
     private Logger logger;
 
     @Inject

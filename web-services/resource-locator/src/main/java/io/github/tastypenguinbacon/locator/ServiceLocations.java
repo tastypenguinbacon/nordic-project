@@ -3,8 +3,10 @@ package io.github.tastypenguinbacon.locator;
 import io.github.tastypenguinbacon.locator.availability.AvailabilityMonitor;
 
 import javax.inject.Inject;
-import javax.validation.constraints.NotNull;
-import javax.ws.rs.*;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import java.util.Map;
 
@@ -23,9 +25,9 @@ public class ServiceLocations {
     }
 
     @POST
-    @Path("{identifier}/{location}")
-    public void registerService(@NotNull @PathParam("identifier") String identifier,
-                                @NotNull @PathParam("location") String location) {
-        availableServices.updateService(identifier, location);
+    public void registerService(Map<String, String> locations) {
+        locations.entrySet().stream()
+                .filter(e -> e.getKey() != null && e.getValue() != null)
+                .forEach(e -> availableServices.updateService(e.getKey(), e.getValue()));
     }
 }

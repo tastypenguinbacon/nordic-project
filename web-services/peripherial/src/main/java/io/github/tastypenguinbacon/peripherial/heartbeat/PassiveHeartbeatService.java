@@ -65,7 +65,6 @@ public class PassiveHeartbeatService implements AvailabilityService {
     }
 
     private void notifyHeartBeatLost(List<String> connectionLost) {
-        throw new UnsupportedOperationException("TODO :___________;");
     }
 
     @Override
