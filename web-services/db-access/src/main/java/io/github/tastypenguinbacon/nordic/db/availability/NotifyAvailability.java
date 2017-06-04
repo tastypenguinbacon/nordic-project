@@ -45,11 +45,10 @@ public class NotifyAvailability {
     @Timeout
     public void timeout() {
         logger.info("Message Processors - notified availability.");
-        String location = System.getProperty("message-processor");
-        Map<String, String> locations = HashMap.of("error-message-processor", location + "/error")
-                .put("status-message-processor", location + "/status")
-                .put("request-message-processor", location + "/request")
-                .put("heartbeat-loss", location + "/heartbeat-loss").toJavaMap();
+        String location = System.getProperty("db-access");
+        Map<String, String> locations = HashMap
+                .of("scripts", location + "/groovy")
+                .put("database", location).toJavaMap();
         resourceLocator.sendMessage(rl -> rl
                 .request()
                 .post(Entity.json(locations)));

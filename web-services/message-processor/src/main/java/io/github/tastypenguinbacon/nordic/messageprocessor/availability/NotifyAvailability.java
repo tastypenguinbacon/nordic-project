@@ -49,7 +49,8 @@ public class NotifyAvailability {
         Map<String, String> locations = HashMap.of("error-message-processor", location + "/error")
                 .put("status-message-processor", location + "/status")
                 .put("request-message-processor", location + "/request")
-                .put("heartbeat-loss", location + "/heartbeat-loss").toJavaMap();
+                .put("custom-message-processor", location)
+                .put("heartbeat-loss", location + "heartbeat-loss").toJavaMap();
         resourceLocator.sendMessage(rl -> rl
                 .request()
                 .post(Entity.json(locations)));
