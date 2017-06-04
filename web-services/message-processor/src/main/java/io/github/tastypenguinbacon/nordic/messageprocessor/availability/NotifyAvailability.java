@@ -1,8 +1,8 @@
 package io.github.tastypenguinbacon.nordic.messageprocessor.availability;
 
-import io.github.tastypenguinbacon.nordic.messageprocessor.logger.SLF4JLogger;
-import io.github.tastypenguinbacon.nordic.messageprocessor.rest.CommunicatorProvider;
-import io.github.tastypenguinbacon.nordic.messageprocessor.rest.TargetService;
+import io.github.tastypenguinbacon.nordic.common.logger.SLF4JLogger;
+import io.github.tastypenguinbacon.nordic.common.rest.CommunicatorProvider;
+import io.github.tastypenguinbacon.nordic.common.rest.TargetService;
 import javaslang.collection.HashMap;
 import org.slf4j.Logger;
 

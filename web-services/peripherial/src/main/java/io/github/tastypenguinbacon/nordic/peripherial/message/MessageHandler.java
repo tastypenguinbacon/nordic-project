@@ -1,9 +1,8 @@
 package io.github.tastypenguinbacon.nordic.peripherial.message;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.JsonNodeFactory;
-import io.github.tastypenguinbacon.nordic.peripherial.rest.CommunicatorProvider;
-import io.github.tastypenguinbacon.nordic.peripherial.rest.TargetService;
+import io.github.tastypenguinbacon.common.rest.CommunicatorProvider;
+import io.github.tastypenguinbacon.common.rest.TargetService;
 import javaslang.control.Option;
 import javaslang.control.Try;
 
@@ -20,15 +19,15 @@ import java.util.function.Function;
 public class MessageHandler {
     @Inject
     @TargetService(name = "error-message-processor")
-    CommunicatorProvider error;
+    private CommunicatorProvider error;
 
     @Inject
     @TargetService(name = "request-message-processor")
-    CommunicatorProvider request;
+    private CommunicatorProvider request;
 
     @Inject
     @TargetService(name = "status-message-processor")
-    CommunicatorProvider status;
+    private CommunicatorProvider status;
 
     public JsonNode consume(Message message) {
         Option<Response> response;

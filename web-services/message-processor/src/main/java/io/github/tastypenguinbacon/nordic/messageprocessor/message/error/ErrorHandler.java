@@ -1,7 +1,7 @@
 package io.github.tastypenguinbacon.nordic.messageprocessor.message.error;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import io.github.tastypenguinbacon.nordic.messageprocessor.logger.SLF4JLogger;
+import io.github.tastypenguinbacon.nordic.common.logger.SLF4JLogger;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;

@@ -1,6 +1,6 @@
 package io.github.tastypenguinbacon.nordic.locator.cache;
 
-import io.github.tastypenguinbacon.nordic.locator.logger.SLF4JLogger;
+import io.github.tastypenguinbacon.nordic.common.logger.SLF4JLogger;
 import javaslang.control.Option;
 import org.slf4j.Logger;
 

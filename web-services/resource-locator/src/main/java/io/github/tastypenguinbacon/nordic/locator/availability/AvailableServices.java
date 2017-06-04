@@ -1,8 +1,8 @@
 package io.github.tastypenguinbacon.nordic.locator.availability;
 
+import io.github.tastypenguinbacon.nordic.common.logger.SLF4JLogger;
 import io.github.tastypenguinbacon.nordic.locator.cache.Cache;
 import io.github.tastypenguinbacon.nordic.locator.cache.CacheTimeout;
-import io.github.tastypenguinbacon.nordic.locator.logger.SLF4JLogger;
 import org.slf4j.Logger;
 
 import javax.ejb.ConcurrencyManagement;

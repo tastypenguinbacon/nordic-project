@@ -1,10 +1,10 @@
 package io.github.tastypenguinbacon.nordic.peripherial.heartbeat;
 
-import io.github.tastypenguinbacon.nordic.peripherial.rest.CommunicatorProvider;
-import io.github.tastypenguinbacon.nordic.peripherial.rest.TargetService;
+import io.github.tastypenguinbacon.common.logger.SLF4JLogger;
+import io.github.tastypenguinbacon.common.rest.CommunicatorProvider;
+import io.github.tastypenguinbacon.common.rest.TargetService;
 import io.github.tastypenguinbacon.nordic.peripherial.cache.Cache;
 import io.github.tastypenguinbacon.nordic.peripherial.cache.CacheTimeout;
-import io.github.tastypenguinbacon.nordic.peripherial.logger.SLF4JLogger;
 import javaslang.collection.HashSet;
 import javaslang.collection.Set;
 import org.slf4j.Logger;

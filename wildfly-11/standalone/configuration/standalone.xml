@@ -34,6 +34,7 @@
     </extensions>
 
     <system-properties>
+        <property name="mongo-db-location" value="localhost:27017"/>
         <property name="resource-locator" value="http://localhost:8080/resource-locator"/>
         <property name="peripherial" value="http://localhost:8080/peripherial"/>
         <property name="message-processor" value="http://localhost:8080/message-processor"/>
@@ -536,14 +537,14 @@
     </socket-binding-group>
 
     <deployments>
+        <deployment name="message-processor.war" runtime-name="message-processor.war">
+            <content sha1="2ddba28c9e56dc160a5b7494d9d623c890e8dfb7"/>
+        </deployment>
         <deployment name="resource-locator.war" runtime-name="resource-locator.war">
-            <content sha1="ade8d3d231e855c1adba3f4870b673fe05976046"/>
+            <content sha1="dc89a676f727e2bc8b1178788bff42f22b904d20"/>
         </deployment>
         <deployment name="peripherial.war" runtime-name="peripherial.war">
-            <content sha1="5d31353982a47438307d991208c772d7721766ed"/>
-        </deployment>
-        <deployment name="message-processor.war" runtime-name="message-processor.war">
-            <content sha1="f6dbd7924b5d3f5c1a3df2a9df0ac711603e331d"/>
+            <content sha1="a2bc94dac5850bccf7833fb95c580b90680edefd"/>
         </deployment>
     </deployments>
 </server>

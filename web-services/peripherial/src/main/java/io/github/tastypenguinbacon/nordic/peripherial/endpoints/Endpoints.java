@@ -24,16 +24,13 @@ public class Endpoints {
                         " available services identifiers, should be used when multiple a supervisor is in charge of multiple" +
                         "stations"),
                 new Endpoint("message", "/peripherial/message/{station_id}", "POST", "Used for messages, accepts a JSON of" +
-                        " the following form:" + exampleJsonMessage() + "."),
-                new Endpoint("tasks", "/peripherial/tasks/{station_id}/{after}", "GET", "Returns a JSON list of tasks scheduled" +
-                        " after the specified period (UNIX Epoch timestamp).")
-        );
+                        " the following form:" + exampleJsonMessage() + "."));
     }
 
     private String exampleJsonMessage() {
         return Json.createObjectBuilder()
                 .add("type", "[ERROR | STATUS | REQUEST]")
-                .add("message", "[message body]")
+                .add("message", "{json message body}")
                 .build().toString();
     }
 }
