@@ -1,4 +1,4 @@
-package io.github.tastypenguinbacon.common.rest;
+package io.github.tastypenguinbacon.nordic.common.rest;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import javaslang.control.Option;

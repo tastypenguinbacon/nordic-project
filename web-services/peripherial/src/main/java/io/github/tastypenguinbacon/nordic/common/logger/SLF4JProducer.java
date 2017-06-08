@@ -1,4 +1,4 @@
-package io.github.tastypenguinbacon.common.logger;
+package io.github.tastypenguinbacon.nordic.common.logger;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

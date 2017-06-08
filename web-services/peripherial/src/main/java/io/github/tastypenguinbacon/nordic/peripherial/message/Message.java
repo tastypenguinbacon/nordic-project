@@ -7,11 +7,8 @@ import com.fasterxml.jackson.databind.JsonNode;
  */
 @ValidMessage
 public class Message {
-    public enum MessageType {
-        ERROR, STATUS, REQUEST
-    }
 
-    private MessageType type;
+    private String type;
 
     private JsonNode message;
 
@@ -23,15 +20,12 @@ public class Message {
         setType(type);
     }
 
-    public MessageType getType() {
+    public String getType() {
         return type;
     }
 
     public void setType(String type) {
-        for (MessageType messageType : MessageType.values()) {
-            if (messageType.toString().equalsIgnoreCase(type))
-                this.type = messageType;
-        }
+        this.type = type.toLowerCase();
     }
 
     public JsonNode getMessage() {

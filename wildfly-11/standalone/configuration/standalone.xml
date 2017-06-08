@@ -538,17 +538,17 @@
     </socket-binding-group>
 
     <deployments>
-        <deployment name="peripherial.war" runtime-name="peripherial.war">
-            <content sha1="a2bc94dac5850bccf7833fb95c580b90680edefd"/>
-        </deployment>
         <deployment name="resource-locator.war" runtime-name="resource-locator.war">
             <content sha1="8e680be635a9144b4566c5e02d12b2e7c8f7fd58"/>
         </deployment>
-        <deployment name="message-processor.war" runtime-name="message-processor.war">
-            <content sha1="809306585590c360122306bdddef83ed856ae04f"/>
-        </deployment>
         <deployment name="db-access.war" runtime-name="db-access.war">
             <content sha1="718d3d58a317375d711e4136c6305f2f19dc57c5"/>
+        </deployment>
+        <deployment name="peripherial.war" runtime-name="peripherial.war">
+            <content sha1="4e42131f801c5d7e502c0cdd872c3d2db3d4bac0"/>
+        </deployment>
+        <deployment name="message-processor.war" runtime-name="message-processor.war">
+            <content sha1="c3f9a2726053867df66d26139b943cc87e9d18b2"/>
         </deployment>
     </deployments>
 </server>

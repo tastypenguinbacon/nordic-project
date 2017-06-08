@@ -31,6 +31,10 @@ public class MessageHandler {
     @TargetService(name = "scripts")
     private CommunicatorProvider scripts;
 
+    @Inject
+    @TargetService(name = "database")
+    private CommunicatorProvider db;
+
     @POST
     @Path("{type}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -42,7 +46,7 @@ public class MessageHandler {
                         .getOrElseThrow(() -> new IllegalStateException("Could not deserialize String")))
                 .getOrElseThrow(() -> new NotFoundException("No script for type: " + type));
         Script groovyScript = ((Script) new GroovyClassLoader().parseClass(script).newInstance());
-        groovyScript.setBinding(new Binding(HashMap.of("message", message).toJavaMap()));
+        groovyScript.setBinding(new Binding(HashMap.of("message", message, "db", db, "log", logger).toJavaMap()));
         String json = new ObjectMapper().writeValueAsString(groovyScript.run());
         return Response.ok().entity(json).build();
     }

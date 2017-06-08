@@ -1,7 +1,7 @@
 package io.github.tastypenguinbacon.nordic.peripherial.message;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import io.github.tastypenguinbacon.common.logger.SLF4JLogger;
+import io.github.tastypenguinbacon.nordic.common.logger.SLF4JLogger;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
@@ -27,6 +27,6 @@ public class MessageResource {
     @Path("{station_id}")
     public JsonNode consumeMessage(@PathParam("station_id") String stationId, @Valid Message message) {
         logger.info("{} sent message {}", stationId, message);
-        return handler.consume(message);
+        return handler.consume(stationId, message);
     }
 }

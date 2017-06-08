@@ -1,6 +1,6 @@
 package io.github.tastypenguinbacon.nordic.peripherial.heartbeat;
 
-import io.github.tastypenguinbacon.common.logger.SLF4JLogger;
+import io.github.tastypenguinbacon.nordic.common.logger.SLF4JLogger;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;

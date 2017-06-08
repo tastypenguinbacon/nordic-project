@@ -1,8 +1,8 @@
 package io.github.tastypenguinbacon.nordic.peripherial.heartbeat;
 
-import io.github.tastypenguinbacon.common.logger.SLF4JLogger;
-import io.github.tastypenguinbacon.common.rest.CommunicatorProvider;
-import io.github.tastypenguinbacon.common.rest.TargetService;
+import io.github.tastypenguinbacon.nordic.common.logger.SLF4JLogger;
+import io.github.tastypenguinbacon.nordic.common.rest.CommunicatorProvider;
+import io.github.tastypenguinbacon.nordic.common.rest.TargetService;
 import io.github.tastypenguinbacon.nordic.peripherial.cache.Cache;
 import io.github.tastypenguinbacon.nordic.peripherial.cache.CacheTimeout;
 import javaslang.collection.HashSet;

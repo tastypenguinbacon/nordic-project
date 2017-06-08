@@ -1,4 +1,4 @@
-package io.github.tastypenguinbacon.common.rest;
+package io.github.tastypenguinbacon.nordic.common.rest;
 
 import javaslang.control.Option;
 import org.slf4j.Logger;

@@ -1,4 +1,4 @@
-package io.github.tastypenguinbacon.common.logger;
+package io.github.tastypenguinbacon.nordic.common.logger;
 
 import javax.inject.Qualifier;
 import java.lang.annotation.Retention;

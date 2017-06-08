@@ -1,8 +1,8 @@
 package io.github.tastypenguinbacon.nordic.peripherial.endpoints;
 
-import io.github.tastypenguinbacon.common.logger.SLF4JLogger;
-import io.github.tastypenguinbacon.common.rest.CommunicatorProvider;
-import io.github.tastypenguinbacon.common.rest.TargetService;
+import io.github.tastypenguinbacon.nordic.common.logger.SLF4JLogger;
+import io.github.tastypenguinbacon.nordic.common.rest.CommunicatorProvider;
+import io.github.tastypenguinbacon.nordic.common.rest.TargetService;
 import javaslang.collection.HashMap;
 import org.slf4j.Logger;
 

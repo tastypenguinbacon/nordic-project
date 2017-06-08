@@ -1,7 +1,7 @@
-package io.github.tastypenguinbacon.common.rest;
+package io.github.tastypenguinbacon.nordic.common.rest;
 
-import io.github.tastypenguinbacon.common.logger.SLF4JLogger;
-import io.github.tastypenguinbacon.common.logger.SLF4JProducer;
+import io.github.tastypenguinbacon.nordic.common.logger.SLF4JLogger;
+import io.github.tastypenguinbacon.nordic.common.logger.SLF4JProducer;
 import javaslang.control.Option;
 import org.slf4j.Logger;
 

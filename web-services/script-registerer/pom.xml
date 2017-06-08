@@ -108,6 +108,7 @@
             <artifactId>jersey-media-multipart</artifactId>
             <version>${jersey2.version}</version>
         </dependency>
+
     </dependencies>
     <build>
         <finalName>script-registerer</finalName>
