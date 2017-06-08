@@ -9,7 +9,7 @@ import org.bson.Document;
 /**
  * Created by pingwin on 04.06.17.
  */
-public class ScriptProvider {
+public class ScriptProvider extends MongoCommunication {
     public Option<String> query(String scriptName) {
         try (MongoClient mongo = obtainMongoClient()) {
             MongoDatabase scripts = mongo.getDatabase("scripts");
@@ -42,11 +42,5 @@ public class ScriptProvider {
             groovyScripts.deleteMany(query);
             groovyScripts.insertOne(toRegister);
         }
-    }
-
-    private MongoClient obtainMongoClient() {
-        String location = System.getProperty("mongo-db-location");
-        String[] hostAndPort = location.split(":");
-        return new MongoClient(hostAndPort[0], Integer.parseInt(hostAndPort[1]));
     }
 }

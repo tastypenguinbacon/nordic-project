@@ -2,18 +2,16 @@ package io.github.tastypenguinbacon.nordic.db.resource;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import io.github.tastypenguinbacon.nordic.common.logger.SLF4JLogger;
+import io.github.tastypenguinbacon.nordic.db.service.DataBase;
 import io.github.tastypenguinbacon.nordic.db.service.ScriptProvider;
 import javaslang.control.Option;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
-import javax.json.Json;
-import javax.json.JsonArray;
-import javax.json.JsonObject;
-import javax.print.attribute.standard.Media;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import java.util.List;
 
 /**
  * Created by pingwin on 04.06.17.
@@ -27,12 +25,15 @@ public class DataAccess {
     @Inject
     private ScriptProvider scriptProvider;
 
+    @Inject
+    private DataBase dataBase;
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("{subsystem}")
-    public JsonArray getData(@PathParam("subsystem") @NotNull String subsystem,
-                             @QueryParam("data-after") @DefaultValue("0") int dataAfter) {
-        return Json.createArrayBuilder().build();
+    @Path("{station}")
+    public List<JsonNode> getData(@PathParam("station") @NotNull String station,
+                                @QueryParam("data-after") @DefaultValue("0") int dataAfter) {
+        return dataBase.getAfter(station, dataAfter).toJavaList();
     }
 
     @POST
@@ -58,15 +59,14 @@ public class DataAccess {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public JsonArray getAvailableIdentifiers() {
-        return Json.createArrayBuilder()
-                .build();
+    public List<String> getAvailableIdentifiers() {
+        return dataBase.availableIdentifiers().toJavaList();
     }
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    @Path("{subsystem}")
-    public void postData(@PathParam("subsystem") String subsystem, JsonNode payload) {
-
+    @Path("{station}")
+    public void postData(@PathParam("station") String station, JsonNode payload) {
+        dataBase.put(station, payload);
     }
 }
