@@ -1,10 +1,12 @@
 package io.github.tastypenguinbacon.nordic.peripherial.message;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import io.github.tastypenguinbacon.nordic.common.logger.SLF4JLogger;
 import io.github.tastypenguinbacon.nordic.common.rest.CommunicatorProvider;
 import io.github.tastypenguinbacon.nordic.common.rest.TargetService;
 import javaslang.control.Option;
 import javaslang.control.Try;
+import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import javax.ws.rs.client.Entity;
@@ -34,6 +36,10 @@ public class MessageHandler {
     @TargetService(name = "message-processor")
     private CommunicatorProvider custom;
 
+    @Inject
+    @SLF4JLogger
+    private Logger logger;
+
     public JsonNode consume(String stationId, Message message) {
         Option<Response> response;
         Map<String, Object> entity = new HashMap<>();
@@ -53,10 +59,12 @@ public class MessageHandler {
             default:
                 response = custom.sendMessage(wt -> perform.apply(wt.path(message.getType())));
         }
+        logger.info("Message Handler received : {}", response);
         return response.filter(Response::hasEntity)
                 .map(r -> Try.of(() -> r)
                         .map(i -> i.readEntity(JsonNode.class))
                         .getOrElse((JsonNode) null))
+                .peek(e -> logger.info("Response entity is {}", e))
                 .flatMap(Option::of)
                 .getOrElse(() -> null);
     }

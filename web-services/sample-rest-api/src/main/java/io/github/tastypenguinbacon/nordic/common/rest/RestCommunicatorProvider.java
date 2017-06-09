@@ -1,13 +1,10 @@
 package io.github.tastypenguinbacon.nordic.common.rest;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import javaslang.control.Option;
 import org.slf4j.Logger;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 import java.util.function.Function;
@@ -37,22 +34,5 @@ public class RestCommunicatorProvider implements CommunicatorProvider {
             logger.warn("Exception occurred while performing request:", e);
             return Option.none();
         }
-    }
-
-    public String getMessage(String target, long after) throws Exception {
-        return locator.locate(serviceName).map(client::target).get().path(target)
-                .queryParam("data-after", after)
-                .request().get()
-                .readEntity(String.class);
-    }
-
-    public String getMessage(String target) throws Exception {
-        return locator.locate(serviceName).map(client::target).get().path(target).request().get()
-                .readEntity(String.class);
-    }
-
-    public void postMessage(String target, String body) throws Exception{
-        locator.locate(serviceName).map(client::target).get().path(target).request()
-                .post(Entity.json(new ObjectMapper().readValue(body, JsonNode.class)));
     }
 }

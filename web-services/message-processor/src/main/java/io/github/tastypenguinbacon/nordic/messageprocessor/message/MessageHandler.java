@@ -10,13 +10,17 @@ import io.github.tastypenguinbacon.nordic.common.logger.SLF4JLogger;
 import io.github.tastypenguinbacon.nordic.common.rest.CommunicatorProvider;
 import io.github.tastypenguinbacon.nordic.common.rest.TargetService;
 import javaslang.collection.HashMap;
+import javaslang.collection.Map;
 import javaslang.control.Try;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;
+import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.io.IOException;
+import java.util.List;
 
 /**
  * Created by pingwin on 03.06.17.
@@ -38,7 +42,7 @@ public class MessageHandler {
     @POST
     @Path("{type}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response handleError(@PathParam("type") String type, JsonNode message) throws IllegalAccessException, InstantiationException, JsonProcessingException {
+    public String handleError(@PathParam("type") String type, JsonNode message) throws IllegalAccessException, InstantiationException, IOException {
         logger.info("Message of type {} given as {} is being handled", type, message);
         String script = scripts.sendMessage(wt -> wt.path(type).request().get())
                 .filter(Response::hasEntity)
@@ -47,7 +51,8 @@ public class MessageHandler {
                 .getOrElseThrow(() -> new NotFoundException("No script for type: " + type));
         Script groovyScript = ((Script) new GroovyClassLoader().parseClass(script).newInstance());
         groovyScript.setBinding(new Binding(HashMap.of("message", message, "db", db, "log", logger).toJavaMap()));
-        String json = new ObjectMapper().writeValueAsString(groovyScript.run());
-        return Response.ok().entity(json).build();
+        Object result = groovyScript.run();
+        logger.info("Message handler received result: {}", result);
+        return result.toString();
     }
 }

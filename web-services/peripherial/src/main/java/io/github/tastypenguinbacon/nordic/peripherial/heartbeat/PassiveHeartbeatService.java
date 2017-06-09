@@ -36,7 +36,7 @@ public class PassiveHeartbeatService implements AvailabilityService {
 
     @Inject
     public PassiveHeartbeatService(@CacheTimeout(HEARTBEAT_TIMEOUT) Cache cache,
-                                   @TargetService(name = "heartbeat-loss") CommunicatorProvider heartbeatLost,
+                                   @TargetService(name = "heartbeat-loss-message-processor") CommunicatorProvider heartbeatLost,
                                    @SLF4JLogger Logger logger) {
         this.cache = cache;
         this.heartbeatLost = heartbeatLost;

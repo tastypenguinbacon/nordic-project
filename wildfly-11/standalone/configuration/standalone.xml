@@ -544,11 +544,14 @@
         <deployment name="db-access.war" runtime-name="db-access.war">
             <content sha1="718d3d58a317375d711e4136c6305f2f19dc57c5"/>
         </deployment>
+        <deployment name="sample-rest-api.war" runtime-name="sample-rest-api.war">
+            <content sha1="3361da16037ae56998ee721b45bec886f76d1cf8"/>
+        </deployment>
         <deployment name="peripherial.war" runtime-name="peripherial.war">
-            <content sha1="4e42131f801c5d7e502c0cdd872c3d2db3d4bac0"/>
+            <content sha1="3962764aa144dd30fc6736e05e648d13edbb2163"/>
         </deployment>
         <deployment name="message-processor.war" runtime-name="message-processor.war">
-            <content sha1="c3f9a2726053867df66d26139b943cc87e9d18b2"/>
+            <content sha1="65c44997132f037e8b8a8cd673d0cabf0a717a15"/>
         </deployment>
     </deployments>
 </server>

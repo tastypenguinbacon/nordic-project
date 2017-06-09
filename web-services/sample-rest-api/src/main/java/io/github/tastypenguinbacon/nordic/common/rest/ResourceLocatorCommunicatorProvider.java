@@ -32,6 +32,4 @@ public class ResourceLocatorCommunicatorProvider implements CommunicatorProvider
             return Option.none();
         }
     }
-
-
 }
