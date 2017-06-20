@@ -32,7 +32,7 @@ public class DataAccess {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("{station}")
     public List<JsonNode> getData(@PathParam("station") @NotNull String station,
-                                @QueryParam("data-after") @DefaultValue("0") int dataAfter) {
+                                @QueryParam("data-after") @DefaultValue("0") long dataAfter) {
         return dataBase.getAfter(station, dataAfter).toJavaList();
     }
 

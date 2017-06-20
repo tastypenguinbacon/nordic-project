@@ -541,9 +541,6 @@
         <deployment name="resource-locator.war" runtime-name="resource-locator.war">
             <content sha1="8e680be635a9144b4566c5e02d12b2e7c8f7fd58"/>
         </deployment>
-        <deployment name="db-access.war" runtime-name="db-access.war">
-            <content sha1="718d3d58a317375d711e4136c6305f2f19dc57c5"/>
-        </deployment>
         <deployment name="sample-rest-api.war" runtime-name="sample-rest-api.war">
             <content sha1="3361da16037ae56998ee721b45bec886f76d1cf8"/>
         </deployment>
@@ -552,6 +549,9 @@
         </deployment>
         <deployment name="message-processor.war" runtime-name="message-processor.war">
             <content sha1="65c44997132f037e8b8a8cd673d0cabf0a717a15"/>
+        </deployment>
+        <deployment name="db-access.war" runtime-name="db-access.war">
+            <content sha1="b338b3147680ea749a9af79001582fef43a27684"/>
         </deployment>
     </deployments>
 </server>
